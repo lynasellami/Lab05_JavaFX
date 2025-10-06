@@ -15,6 +15,11 @@ public class Task02 extends Application {
     private Slider tipSlider;
     private Label tipPercentLabel;
 
+    private Label lblSubtotal;
+    private Label lblTax;
+    private Label lblTip;
+    private Label lblTotal;
+
     @Override
     public void start(Stage primaryStage) {
         Label title = new Label("Restaurant Bill Calculator");
@@ -34,7 +39,6 @@ public class Task02 extends Application {
         cbMain.setPromptText("Select Main Course");
         cbDessert.setPromptText("Select Dessert");
 
-        // --- Tip Slider (0..20) with ticks (from lecture) ---
         tipSlider = new Slider(0, 20, 0);
         tipSlider.setShowTickLabels(true);
         tipSlider.setShowTickMarks(true);
@@ -44,6 +48,12 @@ public class Task02 extends Application {
         tipSlider.setSnapToTicks(true);
 
         tipPercentLabel = new Label("Tip: 0%");
+
+        // Totals labels
+        lblSubtotal = new Label("$0.00");
+        lblTax      = new Label("$0.00");
+        lblTip      = new Label("$0.00");
+        lblTotal    = new Label("$0.00");
 
         GridPane form = new GridPane();
         form.setHgap(12);
@@ -63,10 +73,19 @@ public class Task02 extends Application {
         form.add(tipSlider,               1, 4);
         form.add(tipPercentLabel,         1, 5);
 
+        form.add(new Label("Subtotal:"), 0, 6);
+        form.add(lblSubtotal,            1, 6);
+        form.add(new Label("Tax:"),      0, 7);
+        form.add(lblTax,                 1, 7);
+        form.add(new Label("Tip:"),      0, 8);
+        form.add(lblTip,                 1, 8);
+        form.add(new Label("Total:"),    0, 9);
+        form.add(lblTotal,               1, 9);
+
         VBox root = new VBox(10, title, form);
         root.setPadding(new Insets(12));
 
-        Scene scene = new Scene(root, 560, 460);
+        Scene scene = new Scene(root, 580, 520);
         primaryStage.setTitle("Task 02 - Restaurant Bill");
         primaryStage.setScene(scene);
         primaryStage.show();
