@@ -75,7 +75,38 @@ public class Task01 extends Application {
         VBox root = new VBox(10, title, grid);
         root.setPadding(new Insets(12));
 
-        Scene scene = new Scene(root, 460, 360);
+        // --- Event handling: Order ---
+        orderBtn.setOnAction(e -> {
+            String bag = bagList.getSelectionModel().getSelectedItem();
+            Integer qty = qtyCombo.getValue();
+            Toggle selectedSize = sizeGroup.getSelectedToggle();
+
+            if (bag == null) {
+                output.setText("Please select a bag type.");
+                return;
+            }
+            if (qty == null) {
+                output.setText("Please select a quantity.");
+                return;
+            }
+            if (selectedSize == null) {
+                output.setText("Please select a size.");
+                return;
+            }
+
+            String sizeText = ((RadioButton) selectedSize).getText();
+            output.setText("You ordered " + qty + " " + sizeText + " " + bag + " Bag" + (qty > 1 ? "s." : "."));
+        });
+
+        // --- Event handling: Clear ---
+        clearBtn.setOnAction(e -> {
+            bagList.getSelectionModel().clearSelection();
+            qtyCombo.setValue(null);
+            sizeGroup.selectToggle(null);
+            output.setText("");
+        });
+
+        Scene scene = new Scene(root, 480, 370);
         primaryStage.setTitle("Task 01 - Bag Order Form");
         primaryStage.setScene(scene);
         primaryStage.show();
