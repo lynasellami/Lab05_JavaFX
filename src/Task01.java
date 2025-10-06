@@ -33,7 +33,7 @@ public class Task01 extends Application {
         qtyCombo.setPromptText("Quantity");
         qtyCombo.setVisibleRowCount(10);
 
-        // --- RadioButtons + ToggleGroup: Small / Medium / Large ---
+        // --- RadioButtons + ToggleGroup ---
         ToggleGroup sizeGroup = new ToggleGroup();
         RadioButton rbSmall = new RadioButton("Small");
         RadioButton rbMedium = new RadioButton("Medium");
@@ -45,6 +45,14 @@ public class Task01 extends Application {
 
         HBox sizeRow = new HBox(10, rbSmall, rbMedium, rbLarge);
         sizeRow.setAlignment(Pos.CENTER_LEFT);
+
+        // --- Buttons + Output ---
+        Button orderBtn = new Button("Order");
+        Button clearBtn = new Button("Clear");
+        Label output = new Label("");
+
+        HBox buttons = new HBox(10, orderBtn, clearBtn);
+        buttons.setAlignment(Pos.CENTER_LEFT);
 
         // Layout rows
         GridPane grid = new GridPane();
@@ -61,10 +69,13 @@ public class Task01 extends Application {
         grid.add(new Label("Size:"), 0, 2);
         grid.add(sizeRow,            1, 2);
 
+        grid.add(buttons, 0, 3, 2, 1);
+        grid.add(output,  0, 4, 2, 1);
+
         VBox root = new VBox(10, title, grid);
         root.setPadding(new Insets(12));
 
-        Scene scene = new Scene(root, 440, 330);
+        Scene scene = new Scene(root, 460, 360);
         primaryStage.setTitle("Task 01 - Bag Order Form");
         primaryStage.setScene(scene);
         primaryStage.show();
