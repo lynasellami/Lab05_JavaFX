@@ -1,5 +1,3 @@
-// Git repository: https://github.com/<your-username>/<your-repo>
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
