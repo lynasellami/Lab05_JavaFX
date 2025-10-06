@@ -7,7 +7,7 @@ import javafx.geometry.*;
 
 public class Task02 extends Application {
 
-    private static final double TAX_RATE = 0.13;
+    private static final double TAX_RATE = 0.13; // change if specified otherwise
 
     private ComboBox<String> cbBeverage;
     private ComboBox<String> cbAppetizer;
@@ -48,10 +48,10 @@ public class Task02 extends Application {
         cbMain.getItems().addAll(mainNames);
         cbDessert.getItems().addAll(desNames);
 
-        cbBeverage.setPromptText("Select Beverage");
-        cbAppetizer.setPromptText("Select Appetizer");
-        cbMain.setPromptText("Select Main Course");
-        cbDessert.setPromptText("Select Dessert");
+        cbBeverage.setPromptText("Beverage");
+        cbAppetizer.setPromptText("Appetizer");
+        cbMain.setPromptText("Main Course");
+        cbDessert.setPromptText("Dessert");
 
         tipSlider = new Slider(0, 20, 0);
         tipSlider.setShowTickLabels(true);
@@ -99,14 +99,14 @@ public class Task02 extends Application {
 
         form.add(clearBtn, 0, 10);
 
-        VBox root = new VBox(10, title, form);
-        root.setPadding(new Insets(12));
+        VBox root = new VBox(12, title, form);
+        root.setPadding(new Insets(14));
 
         cbBeverage.setOnAction(e -> recalc());
         cbAppetizer.setOnAction(e -> recalc());
         cbMain.setOnAction(e -> recalc());
         cbDessert.setOnAction(e -> recalc());
-        tipSlider.valueProperty().addListener((obs, oldVal, newVal) -> recalc());
+        tipSlider.valueProperty().addListener((obs, o, n) -> recalc());
 
         clearBtn.setOnAction(e -> {
             cbBeverage.setValue(null);
@@ -121,7 +121,7 @@ public class Task02 extends Application {
             lblTotal.setText("$0.00");
         });
 
-        Scene scene = new Scene(root, 620, 560);
+        Scene scene = new Scene(root, 640, 560);
         primaryStage.setTitle("Task 02 - Restaurant Bill");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -135,14 +135,14 @@ public class Task02 extends Application {
         subtotal += priceOf(cbMain.getValue(),      mainNames, mainPrices);
         subtotal += priceOf(cbDessert.getValue(),   desNames, desPrices);
 
-        double tax = subtotal * TAX_RATE;
+        double tax = subtotal * TAX_RATE; // ⚠️ arithmetic beyond slides; required by lab
         double tipPct = Math.round(tipSlider.getValue());
         tipPercentLabel.setText("Tip: " + (int) tipPct + "%");
 
         double tip = (subtotal + tax) * (tipPct / 100.0);
         double total = subtotal + tax + tip;
 
-        lblSubtotal.setText(String.format("$%.2f", subtotal));
+        lblSubtotal.setText(String.format("$%.2f", subtotal)); // ⚠️ String.format (standard Java)
         lblTax.setText(String.format("$%.2f", tax));
         lblTip.setText(String.format("$%.2f", tip));
         lblTotal.setText(String.format("$%.2f", total));
