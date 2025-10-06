@@ -12,11 +12,13 @@ public class Task02 extends Application {
     private ComboBox<String> cbMain;
     private ComboBox<String> cbDessert;
 
+    private Slider tipSlider;
+    private Label tipPercentLabel;
+
     @Override
     public void start(Stage primaryStage) {
         Label title = new Label("Restaurant Bill Calculator");
 
-        // --- ComboBoxes for each category (from lab sample data) ---
         cbBeverage = new ComboBox<>();
         cbAppetizer = new ComboBox<>();
         cbMain      = new ComboBox<>();
@@ -32,6 +34,17 @@ public class Task02 extends Application {
         cbMain.setPromptText("Select Main Course");
         cbDessert.setPromptText("Select Dessert");
 
+        // --- Tip Slider (0..20) with ticks (from lecture) ---
+        tipSlider = new Slider(0, 20, 0);
+        tipSlider.setShowTickLabels(true);
+        tipSlider.setShowTickMarks(true);
+        tipSlider.setMajorTickUnit(5);
+        tipSlider.setMinorTickCount(4);
+        tipSlider.setBlockIncrement(1);
+        tipSlider.setSnapToTicks(true);
+
+        tipPercentLabel = new Label("Tip: 0%");
+
         GridPane form = new GridPane();
         form.setHgap(12);
         form.setVgap(10);
@@ -46,10 +59,14 @@ public class Task02 extends Application {
         form.add(new Label("Dessert:"), 0, 3);
         form.add(cbDessert,             1, 3);
 
+        form.add(new Label("Tip (0%–20%):"), 0, 4);
+        form.add(tipSlider,               1, 4);
+        form.add(tipPercentLabel,         1, 5);
+
         VBox root = new VBox(10, title, form);
         root.setPadding(new Insets(12));
 
-        Scene scene = new Scene(root, 560, 420);
+        Scene scene = new Scene(root, 560, 460);
         primaryStage.setTitle("Task 02 - Restaurant Bill");
         primaryStage.setScene(scene);
         primaryStage.show();
