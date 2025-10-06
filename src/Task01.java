@@ -23,14 +23,15 @@ public class Task01 extends Application {
                 "Leather",
                 "Plain"
         );
-        bagList.setPrefSize(200, 120);
+        bagList.setPrefSize(220, 120);
+        bagList.getSelectionModel().selectFirst(); // helpful default
 
         // --- ComboBox: quantity 1..10 ---
         ComboBox<Integer> qtyCombo = new ComboBox<>();
         for (int i = 1; i <= 10; i++) {
             qtyCombo.getItems().add(i);
         }
-        qtyCombo.setPromptText("Quantity");
+        qtyCombo.setPromptText("Select quantity (1–10)");
         qtyCombo.setVisibleRowCount(10);
 
         // --- RadioButtons + ToggleGroup ---
@@ -106,7 +107,7 @@ public class Task01 extends Application {
             output.setText("");
         });
 
-        Scene scene = new Scene(root, 480, 370);
+        Scene scene = new Scene(root, 520, 380);
         primaryStage.setTitle("Task 01 - Bag Order Form");
         primaryStage.setScene(scene);
         primaryStage.show();
