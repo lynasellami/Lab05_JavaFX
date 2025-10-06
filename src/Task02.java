@@ -5,7 +5,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.*;
 
-public class Task02 extends Application {
+public class Task02_RestaurantBill extends Application {
+
+    // ⚠️ Beyond slides but required by lab: arithmetic for subtotal/tax/tip/total and string formatting.
+    // JavaFX APIs (ComboBox, Slider, listeners) strictly follow the lectures.
+
+    private static final double TAX_RATE = 0.13; // Adjust if your prof specifies a different rate.
 
     private ComboBox<String> cbBeverage;
     private ComboBox<String> cbAppetizer;
@@ -20,6 +25,19 @@ public class Task02 extends Application {
     private Label lblTip;
     private Label lblTotal;
 
+    // Parallel arrays for names/prices (stay within simple arrays from lectures; no Map)
+    private final String[] bevNames = {"Coffee","Tea","Soft Drink","Water","Milk","Juice"};
+    private final double[] bevPrices = {2.50, 2.00, 1.75, 2.95, 1.50, 2.50};
+
+    private final String[] appNames = {"Soup","Salad","Spring Rolls","Garlic Bread","Chips and Salsa"};
+    private final double[] appPrices = {4.50, 3.75, 5.25, 3.00, 6.95};
+
+    private final String[] mainNames = {"Steak","Grilled Chicken","Chicken Alfredo","Turkey Club","Shrimp Scampi","Pasta","Fish and Chips"};
+    private final double[] mainPrices = {15.00, 13.50, 13.95, 11.90, 18.99, 11.75, 12.25};
+
+    private final String[] desNames = {"Apple Pie","Carrot Cake","Mud Pie","Pudding","Apple Crisp"};
+    private final double[] desPrices = {5.95, 4.50, 4.75, 3.25, 5.98};
+
     @Override
     public void start(Stage primaryStage) {
         Label title = new Label("Restaurant Bill Calculator");
@@ -29,10 +47,10 @@ public class Task02 extends Application {
         cbMain      = new ComboBox<>();
         cbDessert   = new ComboBox<>();
 
-        cbBeverage.getItems().addAll("Coffee","Tea","Soft Drink","Water","Milk","Juice");
-        cbAppetizer.getItems().addAll("Soup","Salad","Spring Rolls","Garlic Bread","Chips and Salsa");
-        cbMain.getItems().addAll("Steak","Grilled Chicken","Chicken Alfredo","Turkey Club","Shrimp Scampi","Pasta","Fish and Chips");
-        cbDessert.getItems().addAll("Apple Pie","Carrot Cake","Mud Pie","Pudding","Apple Crisp");
+        cbBeverage.getItems().addAll(bevNames);
+        cbAppetizer.getItems().addAll(appNames);
+        cbMain.getItems().addAll(mainNames);
+        cbDessert.getItems().addAll(desNames);
 
         cbBeverage.setPromptText("Select Beverage");
         cbAppetizer.setPromptText("Select Appetizer");
@@ -49,7 +67,6 @@ public class Task02 extends Application {
 
         tipPercentLabel = new Label("Tip: 0%");
 
-        // Totals labels
         lblSubtotal = new Label("$0.00");
         lblTax      = new Label("$0.00");
         lblTip      = new Label("$0.00");
@@ -85,11 +102,49 @@ public class Task02 extends Application {
         VBox root = new VBox(10, title, form);
         root.setPadding(new Insets(12));
 
-        Scene scene = new Scene(root, 580, 520);
+        // --- Event handlers (lectures): ComboBox setOnAction, Slider valueProperty listener ---
+        cbBeverage.setOnAction(e -> recalc());
+        cbAppetizer.setOnAction(e -> recalc());
+        cbMain.setOnAction(e -> recalc());
+        cbDessert.setOnAction(e -> recalc());
+
+        tipSlider.valueProperty().addListener((obs, oldVal, newVal) -> recalc());
+
+        Scene scene = new Scene(root, 600, 540);
         primaryStage.setTitle("Task 02 - Restaurant Bill");
         primaryStage.setScene(scene);
         primaryStage.show();
         root.requestFocus();
+    }
+
+    private void recalc() {
+        double subtotal = 0.0;
+        subtotal += priceOf(cbBeverage.getValue(), bevNames, bevPrices);
+        subtotal += priceOf(cbAppetizer.getValue(), appNames, appPrices);
+        subtotal += priceOf(cbMain.getValue(),      mainNames, mainPrices);
+        subtotal += priceOf(cbDessert.getValue(),   desNames, desPrices);
+
+        double tax = subtotal * TAX_RATE; // ⚠️ logic beyond slides but trivial arithmetic
+        double tipPct = Math.round(tipSlider.getValue()); // show integer % like the slider ticks
+        tipPercentLabel.setText("Tip: " + (int) tipPct + "%");
+
+        double tip = (subtotal + tax) * (tipPct / 100.0); // ⚠️ simple arithmetic
+        double total = subtotal + tax + tip;
+
+        lblSubtotal.setText(String.format("$%.2f", subtotal)); // ⚠️ String.format is standard Java
+        lblTax.setText(String.format("$%.2f", tax));
+        lblTip.setText(String.format("$%.2f", tip));
+        lblTotal.setText(String.format("$%.2f", total));
+    }
+
+    private double priceOf(String selected, String[] names, double[] prices) {
+        if (selected == null) return 0.0;
+        for (int i = 0; i < names.length; i++) {
+            if (selected.equals(names[i])) {
+                return prices[i];
+            }
+        }
+        return 0.0;
     }
 
     public static void main(String[] args) {
